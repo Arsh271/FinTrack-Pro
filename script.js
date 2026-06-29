@@ -83,16 +83,29 @@ document.addEventListener('DOMContentLoaded',()=>{
         const newName = settingNameInput.value;
         const newCurrency = settingCurrencyInput.value;
 
+
+
+
         if (newName !== userProfile.userName) {
             const newStorageKey = `transactions_${newName}`;
             localStorage.setItem(newStorageKey, JSON.stringify(transactions));
             localStorage.removeItem(storageKey); // Clean up old data
             storageKey = newStorageKey; // Update active key
         }
+
+        let users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+        let registeredUser = users.find(u => u.userName === userProfile.userName);
+
+        registeredUser.userName = newName;
+        registeredUser.curr = newCurrency;
+        localStorage.setItem('registeredUsers',JSON.stringify(users));
         userProfile = {
             userName: newName,
             curr: newCurrency
         };
+
+
         
         localStorage.setItem('user', JSON.stringify(userProfile)); 
         
@@ -102,6 +115,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     })
 
     //Update UI
+    const generateID = () => Date.now();
     function updateUI(dataToRender = transactions) {
         tableBody.innerHTML = ''; 
         
@@ -148,6 +162,53 @@ document.addEventListener('DOMContentLoaded',()=>{
         localStorage.setItem(storageKey, JSON.stringify(transactions));
         updateChart(totalIncome, totalExpense);
     }
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('txId').value;
+        const type = document.getElementById('txType').value;
+        const description = document.getElementById('txDescription').value;
+        const amount = parseFloat(document.getElementById('txAmount').value);
+        const date = document.getElementById('txDate').value;
+        const category = document.getElementById('txCategory').value;
+
+        const newTx = {
+            id: id ? parseInt(id) : generateID(),
+            type, description, amount, date, category
+        };
+
+        if (id) {
+            transactions = transactions.map(tx => tx.id === newTx.id ? newTx : tx);
+        } else {
+            transactions.push(newTx);
+        }
+        
+        transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        closeModal();
+        updateUI();
+    });
+
+    window.deleteTransaction = (id) => {
+        if(confirm('Are you sure you want to delete this transaction?')) {
+            transactions = transactions.filter(tx => tx.id !== id);
+            updateUI();
+        }
+    };
+
+    window.editTransaction = (id) => {
+        const tx = transactions.find(t => t.id === id);
+        if(!tx) return;
+
+        document.getElementById('txId').value = tx.id;
+        document.getElementById('txType').value = tx.type;
+        document.getElementById('txDescription').value = tx.description;
+        document.getElementById('txAmount').value = tx.amount;
+        document.getElementById('txDate').value = tx.date;
+        document.getElementById('txCategory').value = tx.category;
+
+        modalTitle.innerText = "Edit Transaction";
+        modal.classList.add('active');
+    };
     //logOut user
 
     document.getElementById('logoutBtn').addEventListener('click',()=>{
