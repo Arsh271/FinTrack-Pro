@@ -9,6 +9,7 @@
     --primary-blue: #dbeafe;
     --primary-blue-text: #1e40af;
     --accent-black: #000000;
+    --text-btn:#fff;
     --green-light: #dcfce7;
     --green-text: #166534;
     --red-light: #fee2e2;
@@ -26,6 +27,7 @@ body.dark-theme {
     --primary-blue: #374151;
     --primary-blue-text: #60a5fa;
     --accent-black: #ffffff;
+    --text-btn:#000000;
 }
 
 *{
@@ -115,7 +117,7 @@ body {
 
 .add-btn {
     background-color: var(--accent-black);
-    color: #fff;
+    color: var(--text-btn);
     border: none;
     padding: 14px;
     border-radius: 8px;
