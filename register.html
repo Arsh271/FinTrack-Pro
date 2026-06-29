@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="auth.js" type="module">
+        checkAuth(false);
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center;">
+<body>
+    
+    <div class="auth-card">
+        <h2>Create Account</h2>
+        <p>Join FinTrack Pro</p>
+
+        <form id="registerUser">
+            <div class="form-group">
+                <label >Choose a Username</label>
+                <input type="text"  id="regUsername" required>
+
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" id="regPassword" required>
+            </div>
+            
+
+            <button type="submit" id="registerButton">Register</button>
+        </form>
+        <p>Already have an accout? <a href="./login.html">Login here</a></p>
+    </div>
+    <script type="module">
+        import {registerUser} from './auth.js';
+        document.getElementById('registerUser').addEventListener('submit',(e)=>{
+            e.preventDefault();
+
+            const userName = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+
+            const attempt = registerUser(userName,password,'$');
+
+            if(attempt.success){
+                alert(attempt.message);
+
+                window.location.href = 'login.html'
+            }else{
+                alert(attempt.message);
+            }
+
+
+        })
+    </script>
+</body>
+</html>
