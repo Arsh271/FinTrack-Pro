@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     //UserProfile from localStorage
 
-    let userProfile = JSON.parse(localStorage.getItem('user')) || { username: 'Guest', currency: '$' };
+    let userProfile = JSON.parse(localStorage.getItem('user')) || { userName: 'Guest', curr: '$' };
 
     //Settings Elements
     const topbarName = document.getElementById('topbarName');
@@ -76,6 +76,39 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     searchInput.addEventListener('input', applyFilters);
     typeFilter.addEventListener('change', applyFilters);
+
+
+    //Chart.js
+
+    function updateChart(income,expense){
+        const ctx = document.getElementById('cashFlowChart');
+        if (myChart) { myChart.destroy(); }
+
+        myChart = new Chart(ctx, {
+            type: 'bar',
+        data: {
+        labels: ["Income vs Expense"],
+        datasets: [
+                    { label: 'Income', data: [income], backgroundColor: '#166534', borderRadius: 4 , barThickness: 80,borderWidth: 1 },
+                    { label: 'Expenses', data: [expense], backgroundColor: '#991b1b', borderRadius: 4, barThickness: 80 , borderWidth: 1}
+                ]
+        },
+        options: {
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: { 
+                    y: { 
+                        beginAtZero: true 
+                    } 
+                },
+                plugins: { 
+                    legend: { 
+                        position: 'top' 
+                    } 
+                }
+            }
+        });
+    }
 
     //Setting Form 
     settingsForm.addEventListener('submit',(e)=>{
