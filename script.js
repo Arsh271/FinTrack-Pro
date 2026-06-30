@@ -293,6 +293,61 @@ document.addEventListener('DOMContentLoaded',()=>{
         settingNameInput.value = userProfile.userName;
         settingCurrencyInput.value = userProfile.curr || '$';
     }
+
+    //Convert to CSV
+
+    function convertToCSV(data){ 
+
+        if(data.length === 0) return;
+
+        const headers = ["date","type","description","amount"];
+
+        const rows = data.map(obj =>
+        headers.map(header => `"${obj[header]}"`).join(",")
+    );
+
+    return [
+        headers.join(","),
+        ...rows
+    ].join("\n");
+
+
+    }
+
+    //Download CSV file
+    function downloadCSV(filename, csv) {
+
+    const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+    }
+    let downloadBtn = document.getElementById("downloadBtn");
+    downloadBtn.addEventListener('click',()=>{
+
+        let csv = convertToCSV(transactions);
+        const filename = `${userProfile.userName}_${new Date().toISOString().slice(0, 10)}.csv`;
+        console.log(csv)
+        console.log(filename)
+
+        downloadCSV(filename,csv);
+    })
+
     initProfile();
     updateUI();
 })
