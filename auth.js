@@ -22,7 +22,7 @@ export function loginUser(userName, password) {
     
     if (user) {
 
-        const sessionUser = { userName: user.userName, currency: user.curr };
+        const sessionUser = { userName: user.userName, curr: user.curr };
 
         localStorage.setItem('user', JSON.stringify(sessionUser));
 
