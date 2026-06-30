@@ -250,13 +250,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     })
 
     //theme toggling
+    const darkModeToggle = document.getElementById('darkModeToggle');
 
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-theme');
         darkModeToggle.checked = true;
     }
 
-    const darkModeToggle = document.getElementById('darkModeToggle');
 
     darkModeToggle.addEventListener('change', (e) => {
 
